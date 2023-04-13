@@ -1,9 +1,13 @@
-# GruggBot
-Wise Senior Developer Grugg
+# GrugBot
+Wise Senior Developer Grug
 
-Install 
-llama-index=0.4.39
--e git+https://github.com/hwchase17/langchain.git@b83e8265102514d1722b2fb1aad29763c5cad62a#egg=langchain
+![](static/grug_and_ai.png)
+
+Grug from https://grugbrain.dev/ answers your questions. 
+
+In GrugBot's own words?
+Grug like friend, but friend made of computer code. AI chatbot Grug help young grugs with many things, like finding food or remembering pants. AI chatbot Grug not replace real friends, but make grugs life easier and more fun. AI chatbot Grug like having extra brain and always there when grug need help.
+
 
 
 
