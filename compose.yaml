@@ -1,0 +1,8 @@
+services:
+  gruggapi:
+    build: .
+    ports:
+      - 8000:8000
+    environment:
+      - OPENAI_API_KEY
+    command: tox run -e app -- --host 0.0.0.0
