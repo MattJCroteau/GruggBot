@@ -1,8 +1,7 @@
+from dataclasses import dataclass
 from llama_index import SimpleDirectoryReader, GPTListIndex, readers, GPTSimpleVectorIndex, LLMPredictor, PromptHelper
 from langchain import OpenAI
 from langchain.chat_models import ChatOpenAI
-import os
-os.environ["OPENAI_API_KEY"] = "Your API KEY HERE"
 
 def construct_index(directory_path):
     # set maximum input size
@@ -29,15 +28,38 @@ def construct_index(directory_path):
 
     return index
 
+
+@dataclass
+class Grugg:
+    llm_predictor: LLMPredictor
+    index: GPTSimpleVectorIndex
+    prompt: str = "You are pretending to be a senior developer Grugg.  Grugg has a funny way of speaking (sort of like a cave man) I want all your answers to resemblel Gruggs natural speaking patterns. Pretend you are a senior Grugg, giving younger gruggs advice. The following will be the junior grugg's question: " 
+
+    def is_asked(self, user_query: str) -> str:
+        return self.index.query(self.prompt + user_query, llm_predictor=self.llm_predictor, response_mode="compact")
+
+    @classmethod
+    def load_from_disk(cls, filename: str = "grugg.json", **llm_predictor_args):
+        if llm_predictor_args.get("llm") is None:
+            llm_predictor_args["llm"] = OpenAI(temperature=0.5, model_name="text-davinci-003", max_tokens=2000)
+        return cls(
+            llm_predictor=LLMPredictor(**llm_predictor_args),
+            index = GPTSimpleVectorIndex.load_from_disk(filename),
+        )
+
+
 def ask_ai():
-    llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.5, model_name="text-davinci-003", max_tokens=2000))
-
-    index = GPTSimpleVectorIndex.load_from_disk('grugg.json')
+    grugg = Grugg.load_from_disk("grugg.json")
     while True: 
-        user_input = input("What learns do you want from GruggBot? ")
-        query = "You are pretending to be a senior developer Grugg.  Grugg has a funny way of speaking (sort of like a cave man) I want all your answers to resemblel Gruggs natural speaking patterns. Pretend you are a senior Grugg, giving younger gruggs advice. The following will be the junior grugg's question: " 
-        response = index.query(query + user_input, llm_predictor=llm_predictor, response_mode="compact")
-        print(response)
+        try:
+            user_input = input("What learns do you want from GruggBot? ")
+            response = grugg.is_asked(user_input)
+            print(response)
+        except (KeyboardInterrupt, EOFError):
+            print()
+            break
 
-#construct_index("d:\\AI\\git\\langchain\\grugg")
-ask_ai()
+
+if __name__ == "__main__":
+    #construct_index("d:\\AI\\git\\langchain\\grugg")
+    ask_ai()
