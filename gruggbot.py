@@ -1,7 +1,15 @@
 from dataclasses import dataclass
+import os
+
 from llama_index import SimpleDirectoryReader, GPTListIndex, readers, GPTSimpleVectorIndex, LLMPredictor, PromptHelper
 from langchain import OpenAI
 from langchain.chat_models import ChatOpenAI
+
+
+# "text-ada-001" is significantly less costly than davinci
+MODEL = os.environ.get("OPENAI_MODEL", "text-davinci-003")
+MAX_TOKENS = int(os.environ.get("MAX_TOKENS", 2000))
+
 
 def construct_index(directory_path):
     # set maximum input size
@@ -41,7 +49,7 @@ class Grugg:
     @classmethod
     def load_from_disk(cls, filename: str = "grugg.json", **llm_predictor_args):
         if llm_predictor_args.get("llm") is None:
-            llm_predictor_args["llm"] = OpenAI(temperature=0.5, model_name="text-davinci-003", max_tokens=2000)
+            llm_predictor_args["llm"] = OpenAI(temperature=0.5, model_name=MODEL, max_tokens=MAX_TOKENS)
         return cls(
             llm_predictor=LLMPredictor(**llm_predictor_args),
             index = GPTSimpleVectorIndex.load_from_disk(filename),
