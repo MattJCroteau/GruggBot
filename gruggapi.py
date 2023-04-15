@@ -48,10 +48,10 @@ WHO = """
 
 
 @app.get("/", response_class=HTMLResponse)
-def ask_grug(q: t.Optional[str] = None) -> str:
+async def ask_grug(q: t.Optional[str] = None) -> str:
     if q is not None:
         if q:
-            return ASK_GRUG + ANSWER % (q, GRUGG.is_asked(q))
+            return ASK_GRUG + ANSWER % (q, await GRUGG.is_asked_with_brain(q))
         else:
             # form submit, but no query entered
             return RedirectResponse("/who")
