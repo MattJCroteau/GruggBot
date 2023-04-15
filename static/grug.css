@@ -1,0 +1,17 @@
+body {
+  margin-left: 12vw;
+  margin-right: 12vw;
+}
+#grug {
+  height: 10rem;
+}
+.flex-full-horiz {
+  display: flex;
+  column-gap: 1vw;
+}
+input {
+  padding: 2vh 2vw 2vh 2vw;
+}
+.flex-full-horiz input[type=text] {
+  flex-grow: 1;
+}

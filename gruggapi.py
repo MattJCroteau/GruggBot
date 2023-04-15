@@ -15,21 +15,8 @@ ASK_GRUG = """
 <html>
 <head>
 <title>ask gruggbot</title>
-<style>
-input {
-  padding: 10px;
-}
-input[type=text] {
-  width: 80vw;
-}
-.answer {
-  width: 75vw;
-  text-align: left;
-}
-#grug {
-  height: 40vh;
-}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/grug.css">
 </head>
 <body>
 <center>
